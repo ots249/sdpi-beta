@@ -103,28 +103,25 @@
 
         // Export as Image
         document.getElementById('exportBtn').addEventListener('click', () => {
-            if (typeof downloadResultCard === 'function') {
-                downloadResultCard();
-            } else {
-                // Fallback if script.js hasn't loaded or function is missing
-                const element = document.getElementById("resultPopupBody");
-                if (!element) return;
-                showToast("Creating image... Please wait", 'info');
-                html2canvas(element, {
-                    backgroundColor: '#ffffff',
-                    scale: 2,
-                    useCORS: true,
-                    padding: 20
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = `BTEB_Result_${Date.now()}.png`;
-                    link.href = canvas.toDataURL('image/png');
-                    link.click();
-                    showToast("Downloaded!", 'success');
-                }).catch(err => {
-                    showToast("Failed to export", 'error');
-                });
-            }
+            const element = document.getElementById("resultPopupBody");
+            if (!element) return;
+            
+            showToast("Creating image... Please wait", 'info');
+            
+            html2canvas(element, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                useCORS: true,
+                padding: 20
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `BTEB_Result_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Downloaded!", 'success');
+            }).catch(err => {
+                showToast("Failed to export", 'error');
+            });
         });
 
         // Share
