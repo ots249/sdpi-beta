@@ -175,7 +175,12 @@
             <div class="result-popup-content">
                 <div class="result-popup-header">
                     <h3><i class="fas fa-poll"></i> Examination Result</h3>
-                    <button class="result-popup-close" onclick="closeResultPopup()">&times;</button>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <button id="downloadResultBtn" class="action-btn" style="padding: 5px 12px; font-size: 0.8rem; height: auto;" onclick="downloadResultCard()">
+                            <i class="fas fa-download"></i> Download Card
+                        </button>
+                        <button class="result-popup-close" onclick="closeResultPopup()">&times;</button>
+                    </div>
                 </div>
                 <div id="resultPopupBody" class="result-popup-body">
                     <!-- Results will be injected here -->
