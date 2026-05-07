@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    
+    <!-- Primary Meta Tags -->
+    <title>DPI Student Portal - Search Student Information | Dhaka Polytechnic Institute</title>
+    <meta name="title" content="DPI Student Portal - Search Student Information | Dhaka Polytechnic Institute">
+    <meta name="description" content="Unofficial student information portal for Dhaka Polytechnic Institute (DPI). Search board roll numbers, academic results, and student records easily and quickly.">
+    <meta name="keywords" content="DPI, Dhaka Polytechnic Institute, Student Portal, DPI Student Info, Board Roll, Diploma Results, Polytechnic Student, DPI Result">
+    <meta name="author" content="Oahid Towsif Shamol">
+    <meta name="robots" content="index, follow, max-snippet:-1, max-video-preview:-1, max-image-preview:large">
+    <meta name="language" content="Bengali, English">
+    <meta name="revisit-after" content="1 days">
+    
+    <!-- Disclaimer for unofficial site -->
+    <meta name="rating" content="General">
+    <meta name="distribution" content="Global">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sdpi.pro.bd/">
+    <meta property="og:title" content="DPI Student Portal - Search Student Information">
+    <meta property="og:description" content="Unofficial student information portal for Dhaka Polytechnic Institute. Search board roll, results, and academic records.">
+    <meta property="og:image" content="https://sdpi.pro.bd/og-image.jpg">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sdpi.pro.bd/">
+    <meta property="twitter:title" content="DPI Student Portal - Search Student Information">
+    <meta property="twitter:description" content="Unofficial student information portal for Dhaka Polytechnic Institute. Search board roll, results, and academic records.">
+    <meta property="twitter:image" content="https://sdpi.pro.bd/og-image.jpg">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sdpi.pro.bd/">
+    
+    <!-- JSON-LD Schema Markup -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "DPI Student Portal",
+      "url": "https://sdpi.pro.bd",
+      "description": "Search student information of Dhaka Polytechnic Institute",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://sdpi.pro.bd/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- manifest লিঙ্ক -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- থিম কালার -->
+    <meta name="theme-color" content="#4a6fa5">
+    
+    <!-- iOS সাপোর্ট -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192x192.png">
+    
+    <!-- অ্যাপ ইন্সটলেশন -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- Disclaimer Banner -->
+    <div class="disclaimer-banner">
+        <i class="fas fa-info-circle"></i>
+        <span>⚠ This is an <strong>unofficial</strong> student service portal. Not affiliated with DPI or BTEB. For official information, please visit <a href="https://dhaka.polytech.gov.bd" target="_blank">dhaka.polytech.gov.bd</a>.</span>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+                <h1>DPI Student Portal</h1>
+                <p class="tagline">Student Information Search - 2025</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-number" id="totalStudents">0</div>
+                <div class="stat-label">Total Students</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="searchesToday">0</div>
+                <div class="stat-label">Searches Today</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="search-header">
+                <i class="fas fa-search"></i>
+                <h2>Find Student Information</h2>
+            </div>
+            
+            <div class="search-container">
+                <div class="search-box">
+                    <div class="search-input-container">
+                        <input type="text" 
+                               id="searchInput" 
+                               class="search-input"
+                               placeholder="Enter Board Roll or Student Name..."
+                               autocomplete="off">
+                        <i class="fas fa-user-graduate search-icon"></i>
+                    </div>
+                    <button id="searchBtn" class="search-btn" onclick="searchStudent()">
+                        <i class="fas fa-search"></i> Find Student
+                    </button>
+                </div>
+                
+                <div class="suggestions-container">
+                    <div id="suggestions" class="suggestions-box"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading Animation -->
+        <div id="loading" class="loading">
+            <div class="spinner"></div>
+            <p>Loading student information...</p>
+        </div>
+
+        <!-- Results Section -->
+        <section id="resultsSection" class="results-section">
+            <div class="results-header">
+                <h2><i class="fas fa-user-circle"></i> Student Information</h2>
+                <div class="student-count">
+                    <i class="fas fa-users"></i>
+                    <span id="resultCount">1 student found</span>
+                </div>
+            </div>
+            
+            <div id="result" class="result-content"></div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                <button id="printBtn" class="action-btn print-btn" onclick="printResult()">
+                    <i class="fas fa-print"></i> Print
+                </button>
+                <button id="exportBtn" class="action-btn export-btn" onclick="exportAsImage()">
+                    <i class="fas fa-image"></i> Export Image
+                </button>
+                <button id="shareBtn" class="action-btn share-btn" onclick="shareResult()">
+                    <i class="fas fa-share-alt"></i> Share
+                </button>
+            </div>
+        </section>
+
+        <!-- Result Result Popup (New) -->
+        <div id="resultPopup" class="result-popup-overlay" style="display: none;">
+            <div class="result-popup-content">
+                <div class="result-popup-header">
+                    <h3><i class="fas fa-poll"></i> Examination Result</h3>
+                    <button class="result-popup-close" onclick="closeResultPopup()">&times;</button>
+                </div>
+                <div id="resultPopupBody" class="result-popup-body">
+                    <!-- Results will be injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Error Boundary Overlay (New) -->
+        <div id="errorBoundary" class="error-boundary-overlay" style="display: none;">
+            <div class="error-boundary-content">
+                <div class="error-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h2>Something went wrong</h2>
+                <p>The portal encountered an unexpected error. Please try refreshing the page or contact support if the issue persists.</p>
+                <div id="errorMessage" class="error-details"></div>
+                <button class="refresh-btn" onclick="location.reload()">
+                    <i class="fas fa-sync-alt"></i> Refresh Portal
+                </button>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div id="toastContainer"></div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="about.html" class="footer-link">
+                    <i class="fas fa-info-circle"></i> About
+                </a>
+                <a href="/result" class="footer-link">
+                    <i class="fas fa-poll"></i> Result
+                </a>
+                <a href="privacy.html" class="footer-link">
+                    <i class="fas fa-shield-alt"></i> Privacy
+                </a>
+            </div>
+            <div class="copyright">
+                <p>DPI Student Portal (Unofficial) &copy; 2026<br>Developed with <i class="fas fa-heart" style="color:#ff6b6b;"></i> by <b>Oahid Towsif Shamol</b></p>
+                <p style="font-size:0.8rem; margin-top:5px;">Last Information Updated: <code>25/09/2025</code></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

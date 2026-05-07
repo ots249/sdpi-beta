@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>Check Result - DPI Student Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="animated-bg">
+        <div class="floating-shapes">
+            <div></div><div></div><div></div>
+        </div>
+    </div>
+
+    <header class="header">
+        <a href="/" class="logo" style="text-decoration: none; color: inherit;">
+            <i class="fas fa-graduation-cap"></i>
+            <div>
+                <h1>DPI Student Portal</h1>
+                <p class="tagline">Check Academic Results</p>
+            </div>
+        </a>
+    </header>
+
+    <main class="main-container">
+        <section class="search-section">
+            <div class="search-header">
+                <i class="fas fa-poll"></i>
+                <h2>Enter Board Roll to Check Result</h2>
+            </div>
+            
+            <div class="search-container">
+                <input type="number" id="rollInput" placeholder="Enter Board Roll (e.g. 240363)" class="search-input">
+                <button id="checkResultBtn" class="search-btn">
+                    <i class="fas fa-search"></i> Check Result
+                </button>
+            </div>
+        </section>
+
+            <section id="resultDisplay" class="result-page-card" style="display: none;">
+            <div class="result-popup-content" style="box-shadow: none; width: 100%; border-radius: 0; max-height: none; padding-top: 0; max-width: none;">
+                <div class="result-popup-header" style="justify-content: center; position: relative;">
+                    <h3 style="margin: 0; color: #1e293b; font-weight: 700;"><i class="fas fa-poll"></i> Examination Result</h3>
+                </div>
+                <div id="resultPopupBody" class="result-popup-body" style="padding: 20px;">
+                    <!-- Results will be rendered here -->
+                </div>
+                
+                <!-- Action Buttons from Main Portal -->
+                <div class="action-buttons" style="display: flex; gap: 10px; padding: 20px; flex-wrap: wrap; justify-content: center; border-top: 1px solid #f1f5f9;">
+                    <button id="printBtn" class="action-btn print-btn" onclick="window.print()" style="min-width: 100px;">
+                        <i class="fas fa-print"></i> Print
+                    </button>
+                    <button id="exportBtn" class="action-btn export-btn" style="min-width: 100px;">
+                        <i class="fas fa-image"></i> Image
+                    </button>
+                    <button id="shareBtn" class="action-btn share-btn" style="min-width: 100px;">
+                        <i class="fas fa-share-alt"></i> Share
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <div id="loading" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+            <p>Fetching result from BTEB Server...</p>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-links">
+                <a href="/" class="footer-link"><i class="fas fa-home"></i> Home</a>
+                <a href="about.html" class="footer-link"><i class="fas fa-info-circle"></i> About</a>
+                <a href="privacy.html" class="footer-link"><i class="fas fa-shield-alt"></i> Privacy</a>
+            </div>
+            <p class="copyright">DPI Student Portal (Unofficial) &copy; 2026</p>
+        </div>
+    </footer>
+
+    <!-- Error Boundary -->
+    <div id="errorBoundary" class="error-boundary-overlay" style="display: none;">
+        <div class="error-boundary-content">
+            <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2>Something went wrong</h2>
+            <div id="errorMessage" class="error-details"></div>
+            <button class="refresh-btn" onclick="location.reload()">Refresh Page</button>
+        </div>
+    </div>
+
+    <div id="toastContainer"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Result Action Handlers
+        function closeResultPopup() {
+            document.getElementById('resultDisplay').style.display = 'none';
+        }
+
+        // Export as Image
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            const element = document.getElementById("resultPopupBody");
+            if (!element) return;
+            
+            showToast("Creating image... Please wait", 'info');
+            
+            html2canvas(element, {
+                backgroundColor: '#ffffff',
+                scale: 2,
+                useCORS: true,
+                padding: 20
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `BTEB_Result_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                showToast("Downloaded!", 'success');
+            }).catch(err => {
+                showToast("Failed to export", 'error');
+            });
+        });
+
+        // Share
+        document.getElementById('shareBtn').addEventListener('click', () => {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'BTEB Student Result',
+                    text: 'Check out this examination result from DPI Student Portal',
+                    url: window.location.href
+                }).catch(() => {});
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                showToast("Link copied to clipboard", 'success');
+            }
+        });
+
+        // Check result if roll is in URL
+        window.addEventListener('load', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const roll = urlParams.get('roll');
+            if (roll) {
+                document.getElementById('rollInput').value = roll;
+                checkResult(roll);
+            }
+            
+            document.getElementById('checkResultBtn').addEventListener('click', () => {
+                const roll = document.getElementById('rollInput').value.trim();
+                if (roll) checkResult(roll);
+                else showToast("Please enter a roll number", "warning");
+            });
+
+            document.getElementById('rollInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    const roll = e.target.value.trim();
+                    if (roll) checkResult(roll);
+                }
+            });
+        });
+
+        async function checkResult(roll) {
+            const loading = document.getElementById('loading');
+            const resultDisplay = document.getElementById('resultDisplay');
+            const btn = document.getElementById('checkResultBtn');
+            const errorBoundary = document.getElementById('errorBoundary');
+            
+            loading.style.display = 'block';
+            resultDisplay.style.display = 'none';
+            btn.disabled = true;
+            
+            try {
+                // Explicitly pass curriculumId as requested by user constraints
+                const apiUrl = `/api/results?roll=${roll}&curriculumId=diploma_in_engineering`;
+                const response = await fetch(apiUrl);
+                
+                const resData = await response.json();
+                console.log("Result received:", resData);
+                
+                if (resData.success && resData.data && resData.data.length > 0) {
+                    const data = resData.data[0];
+                    
+                    const resultBody = document.getElementById('resultPopupBody');
+                    
+                    // Safety check if renderResultData is available
+                    if (typeof renderResultData === 'function') {
+                        const html = renderResultData(data);
+                        resultBody.innerHTML = html;
+                        resultDisplay.style.display = 'block';
+                    } else {
+                        throw new Error("UI Renderer not available. Please refresh the page.");
+                    }
+                    
+                    // Update URL without refreshing
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?roll=' + roll;
+                    window.history.pushState({roll: roll}, '', newUrl);
+                } else {
+                    const errorMsg = resData.error || "No results found for this roll number.";
+                    showToast(errorMsg, "error");
+                    
+                    const resultBody = document.getElementById('resultPopupBody');
+                    resultBody.innerHTML = `<div class="no-results" style="padding:40px; text-align:center; background:white; border-radius:20px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+                        <i class="fas fa-search" style="font-size:3rem; color:#cbd5e1; margin-bottom:15px;"></i>
+                        <h3 style="color:#1e293b; margin-bottom:10px;">Result Not Found</h3>
+                        <p style="color:#64748b; margin-bottom:20px;">${errorMsg}</p>
+                        <a href="https://btebresultszone.com/student-results?roll=${roll}&curriculumId=diploma_in_engineering" target="_blank" class="search-btn" style="display:inline-block; text-decoration:none; background:#4a6fa5;">
+                           Try Direct Link <i class="fas fa-external-link-alt"></i>
+                        </a>
+                    </div>`;
+                    resultDisplay.style.display = 'block';
+                }
+            } catch (err) {
+                console.error("CheckResult Error:", err);
+                showToast("Connection Error: " + (err.message || "Unknown error"), "error");
+                
+                resultDisplay.innerHTML = `<div class="no-results" style="padding:40px; text-align:center; background:white; border-radius:20px;">
+                    <i class="fas fa-wifi" style="font-size:3rem; color:#f87171; margin-bottom:15px;"></i>
+                    <h3 style="color:#1e293b; margin-bottom:10px;">Connection Failed</h3>
+                    <p style="color:#64748b; margin-bottom:20px;">We couldn't connect to the BTEB server. This might be due to server maintenance or slow internet.</p>
+                    <button onclick="checkResult('${roll}')" class="search-btn" style="background:#4a6fa5;">Retry Now</button>
+                </div>`;
+                resultDisplay.style.display = 'block';
+            } finally {
+                loading.style.display = 'none';
+                btn.disabled = false;
+            }
+        }
+        
+        // Provide mock functions in case script.js fails to load
+        if (typeof showToast !== 'function') {
+            window.showToast = (msg, type) => alert(msg);
+        }
+    </script>
+</body>
+</html>
