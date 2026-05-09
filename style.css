@@ -630,10 +630,16 @@ body {
 }
 
 .result-header-modern .result-summary-box {
-    margin: 20px auto 0;
+    margin: 15px auto 0;
     max-width: fit-content;
-    font-size: 1.1rem;
-    padding: 10px 20px;
+    font-size: 1rem;
+    padding: 8px 20px;
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+    border-radius: 20px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.1);
 }
 
 /* Standalone Result Page Card */

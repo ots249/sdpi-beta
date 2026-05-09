@@ -39,6 +39,11 @@ function checkAndResetSearches() {
 }
 checkAndResetSearches();
 
+// Export functions to global scope for HTML onclick handlers
+window.searchStudent = searchStudent;
+window.showResultPopup = showResultPopup;
+window.closeResultPopup = closeResultPopup;
+
 window.addEventListener('load', function () {
     console.log("Window loaded - Initializing...");
     
@@ -912,12 +917,12 @@ function renderResultData(data) {
             <div class="result-student-name">
                 <i class="far fa-user"></i> ${studentName}
             </div>
-            <div class="result-sub-header">
-                <span><i class="fas fa-book-open"></i> Diploma in Engineering</span>
-                <span><i class="far fa-calendar-check"></i> Regulation ${data.regulation}</span>
-            </div>
             <div class="result-institute">
                 <i class="fas fa-university"></i> ${data.institute.name}, ${data.institute.district}
+            </div>
+            <div class="result-sub-header" style="margin-top: 10px;">
+                <span><i class="fas fa-book-open"></i> Diploma in Engineering</span>
+                <span><i class="far fa-calendar-check"></i> Regulation ${data.regulation}</span>
             </div>
             ${summaryBox}
         </div>

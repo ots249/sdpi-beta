@@ -1,21 +1,8 @@
 {
-  "rewrites": [
-    {
-      "source": "/about",
-      "destination": "/about.html"
-    },
-    {
-      "source": "/privacy",
-      "destination": "/privacy.html"
-    },
-    { "source": "/app", 
-      "destination": "/app.html" 
-    },
-    {
-      "source": "/((?!api/).*)",
-      "destination": "/$1.html"
-    }
-  ],
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/api/results", "destination": "/api/results.ts" }
+  ]
 }
