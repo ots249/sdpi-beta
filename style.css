@@ -585,6 +585,57 @@ body {
 }
 
 /* Result Popup Styles - Refined */
+/* View Result Button */
+.view-result-btn {
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    padding: 8px 15px;
+    border-radius: 12px;
+    color: #4a6fa5;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.view-result-btn:hover {
+    background: var(--gradient);
+    color: white;
+    border-color: transparent;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(74, 111, 165, 0.2);
+}
+
+.view-result-btn i {
+    font-size: 0.9rem;
+}
+
+.btn-tag {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: rgba(74, 111, 165, 0.1);
+    padding: 2px 8px;
+    border-radius: 6px;
+    margin-left: 4px;
+}
+
+.view-result-btn:hover .btn-tag {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.result-header-modern .result-summary-box {
+    margin: 20px auto 0;
+    max-width: fit-content;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+}
+
 /* Standalone Result Page Card */
 .result-page-card {
     background: white;

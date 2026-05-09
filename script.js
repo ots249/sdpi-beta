@@ -25,7 +25,19 @@ let exportBtn = null;
 let shareBtn = null;
 let searchBtn = null;
 let totalStudentsElem = null;
-let searchesToday = 0;
+let searchesToday = parseInt(localStorage.getItem('searchesToday') || '0');
+
+function checkAndResetSearches() {
+    const lastSearchDate = localStorage.getItem('lastSearchDate');
+    const today = new Date().toDateString();
+    
+    if (lastSearchDate !== today) {
+        searchesToday = 0;
+        localStorage.setItem('searchesToday', '0');
+        localStorage.setItem('lastSearchDate', today);
+    }
+}
+checkAndResetSearches();
 
 window.addEventListener('load', function () {
     console.log("Window loaded - Initializing...");
@@ -46,6 +58,9 @@ window.addEventListener('load', function () {
     
     // Setup event listeners
     setupEventListeners();
+    
+    // Show initial stats (especially search count from localStorage)
+    updateStats();
 });
 
 // Toast Notification
@@ -237,6 +252,7 @@ function searchStudent() {
     
     // Update search count
     searchesToday++;
+    localStorage.setItem('searchesToday', searchesToday.toString());
     updateStats();
     
     showLoading(true);
@@ -335,9 +351,8 @@ function createStudentCard(student, index, total) {
     // যদি ফিল্ডটি "Board Roll" হয়, তাহলে তাকে লিঙ্কে পরিণত করো
     if (field === "Board Roll" || field === "Roll") {
     const rollNumber = value.toString().trim();
-    value = `<button onclick="showResultPopup('${rollNumber}')" 
-    style="background: none; border: none; padding: 0; color: #4a6fa5; text-decoration: none; font-weight: 600; border-bottom: 1px dashed #4a6fa5; padding: 2px 0; cursor: pointer; font-family: inherit;">
-    <i class="fas fa-poll-h" style="margin-right: 5px;"></i>${rollNumber} <b>(view result)</b>
+    value = `<button onclick="showResultPopup('${rollNumber}')" class="view-result-btn">
+    <i class="fas fa-poll-h"></i> ${rollNumber} <span class="btn-tag">View Result</span>
     </button>`;
     }
     
@@ -892,7 +907,6 @@ function renderResultData(data) {
     }
 
     return `
-        ${summaryBox}
         <div class="result-header-modern">
             <h1 class="result-roll"># ${data.roll}</h1>
             <div class="result-student-name">
@@ -905,6 +919,7 @@ function renderResultData(data) {
             <div class="result-institute">
                 <i class="fas fa-university"></i> ${data.institute.name}, ${data.institute.district}
             </div>
+            ${summaryBox}
         </div>
         <div class="semester-results-grid">
             ${semesterCards}
