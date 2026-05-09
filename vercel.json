@@ -2,7 +2,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/", "destination": "/index.html" },
-    { "source": "/api/results", "destination": "/api/results.ts" }
+    { "source": "/api/results", "destination": "/api/results.ts" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
