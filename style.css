@@ -647,13 +647,22 @@ body {
 }
 
 .result-popup-header {
-    padding: 10px 20px;
+    padding: 15px 20px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: center;
     position: sticky;
     top: 0;
     background: white;
     z-index: 100;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.result-popup-header h3 {
+    margin: 0;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 1.2rem;
 }
 
 .result-popup-close {
@@ -689,10 +698,10 @@ body {
 }
 
 .result-roll {
-    font-size: 2.2rem;
-    color: #475569;
+    font-size: 1.5rem;
+    color: #4a6fa5;
     margin: 0;
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: -0.5px;
 }
 
